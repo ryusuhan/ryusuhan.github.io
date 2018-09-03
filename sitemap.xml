@@ -3,12 +3,17 @@
 
     <sitemap>
         <loc>http://ryusuhan.github.io/post-sitemap.xml</loc>
-        <lastmod>2018-08-02T12:32:07.938Z</lastmod>
+        <lastmod>2018-09-03T13:55:11.404Z</lastmod>
     </sitemap>
 
     <sitemap>
         <loc>http://ryusuhan.github.io/page-sitemap.xml</loc>
         <lastmod>2018-07-22T12:19:26.676Z</lastmod>
+    </sitemap>
+
+    <sitemap>
+        <loc>http://ryusuhan.github.io/category-sitemap.xml</loc>
+        <lastmod>2018-09-03T13:55:11.404Z</lastmod>
     </sitemap>
 
     <sitemap>
