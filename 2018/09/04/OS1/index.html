@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          OS 1장 : Operating System Introduction - 류뚱의 백엔드파티
+        
+    </title>
+
+    <link rel="canonical" href="http://ryusuhan.github.io/2018/09/04/OS1/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/Banff.jpeg')
+            /*post*/
+        
+    }
+    
+    #signature{
+        background-image: url('/img/signature/BeanTechSign-white.png');
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#OS" title="OS">OS</a>
+                            
+                              <a class="tag" href="/tags/#CS" title="CS">CS</a>
+                            
+                        </div>
+                        <h1>OS 1장 : Operating System Introduction</h1>
+                        <h2 class="subheading">OS 정리 시작</h2>
+                        <span class="meta">
+                            Posted by ryudd on
+                            2018-09-04
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Always Awake</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1><span id="operating-systemos">Operating System(OS)!!</span></h1>
+<hr>
+<p>운영체제도 이번 포스트를 시작으로 공부한 내용들을 하나씩 정리해 둘 생각이다. 당연한 말이지만 OS 열심히 해야된다 진쫘로 시작하겠다.</p>
+<p>운영체제를 공부할 때는 평소처럼 <code>사용자의 관점이 아니라 OS 개발자 입장에서 공부해야 한다는 것을 명심</code>하고 공부하자!<br>
+내가 OS(Linux나 Ios같은)라고 생각하고 공부하자<br>
+=&gt; 일을 어떻게 처리하는 것이 좋을까!</p>
+<h2><span id="os운영체제란-무엇인가">OS(운영체제)란 무엇인가?</span></h2>
+<p>평소에도 <code>OS(운영체제)</code>라는 말을 많이 들어보았을 것이다. Windows라던가 IOS라던가 그래서 OS라는 것은 정확하게 무엇일까?</p>
+<img src="OSarch.jpg" width="500" height="200">
+위의 그림에서 H/W와 그 윗단의 S/W들 사이에 OS의 위치를 알 수 있다.
+<p>OS란 컴퓨터 하드웨어 바로 위에 설치되어 사용자 및 다른 소프트웨어와 하드웨어를 연결하는 <code>소프트웨어 계층</code>이다.<br>
+인간의 신체가 뇌의 통제를 받아 움직이듯 컴퓨터의 H/W들은 OS의 통제를 받으며 그 OS는 사람이 프로그래밍을 통해 만든다!</p>
+<ul>
+<li>좁은 의미에서의 OS는 **Kernel(커널)**이라고 부르는 운영체제의 핵심부만을 의미한다 이 <code>kernel은 Memory에 상주한다.</code></li>
+<li>넓은 의미의 OS는 커널을 포함한 각종 시스템 유틸리티 전부(메모리에 상주하지 않는 독립적인 프로그램들)를 의미하는 개념이다.</li>
+<li><code>전공자 입장에서 OS는 주로 Kernel만을 의마한다.</code></li>
+</ul>
+<h2><span id="os의-목적">OS의 목적!</span></h2>
+<p>OS의 위치는 H/W 바로 윗단, 각종 S/W와 사용자의 바로 아랫단에 위치하므로 <code>H/W를 효율적으로 관리하는 것이 OS의 가장 큰 역할</code>이라고 할 수 있다.<br>
+=&gt; Computer System의 자원(Resource)을 효율적으로 관리하는 것!</p>
+<p>여기서 <strong>Resource</strong>란 CPU, Memory, 각종 I/O Device등을 의미한다.</p>
+<ul>
+<li>CPU, Memory, I/O Device는 <strong>H/W자원</strong></li>
+<li>Process나 file, message등은 <strong>S/W 자원</strong>이라고 부른다. OS는 System안에서 H/W 자원 뿐만 아니라 S/W 자원도 관리해야 한다.</li>
+</ul>
+<p><code>이들을 효율적으로 관리하는 것이 OS의 주목적인 것</code></p>
+<p>OS의 목적을 나누어 보면!</p>
+<ol>
+<li>
+<p>효율성 : 첫 번째 목적은 주어진 자원으로 최고의 성능을 내도록 하는것 Computer System 내의 자원(Resource)는 이미 제공되어 있는 것! 초당 Instruction을 몇 개씩 처리하는 CPU와 몇 기가의 Memory 식으로 <code>이미 제공받은 자원으로 최고의 효율로 동작하게 하는 것이 OS의 목적</code>이라고 할 수 있다.<br>
+하지만 효율성만을 강조하다보면 특정 프로그램이나 특정 사용자가 차별받는 상황이 나올 수 있다. <strong>그렇기 때문에</strong></p>
+</li>
+<li>
+<p>형평성 있는 자원분배 : 특정 프로그램이나 사용자가 <code>차별 받지 않도록 자원을 형평성 있게 분배</code>해 주어야 한다.</p>
+</li>
+<li>
+<p>컴퓨터 시스템을 편리하게 사용할 수 있는 환경을 제공 : OS는 사용자의 바로 아랫단에 위치하므로 <code>사용자가 시스템을 편리하게 사용하는 것</code>에도 목적을 둔다.<br>
+현대의 Computer는 여러 프로그램이 동시에 사용되는 것이 지원되는데 사용자 입장에서 독자적 Computer에서 수행되는 것처럼 보이게 하는 것도 OS의 역할이라고 할 수 있다.<br>
+=&gt; 프로그램이 너무 많이 실행되다 보면 서로 Memory할당을 위해 충돌이 발생할 수 있다. <code>이를 조율하는 것도 OS의 역할!</code></p>
+</li>
+</ol>
+<hr>
+<h2><span id="운영체제의-분류">운영체제의 분류</span></h2>
+<p>운영체제(OS)를 어떻게 분류할 수 있겠는가?</p>
+<ul>
+<li>동시 작업 가능 여부 : Single Tasking 인가 Multi Tasking인가?</li>
+<li>사용자의 수 : Single User인가 Multi User인가 =&gt; <strong>동시 접속이 가능한 지!</strong></li>
+<li>처리 방식 : Batch Processing(일괄 처리), Time Sharing(시분할), Realtime OS(실시간) 으로 나누어서 본다.</li>
+</ul>
+<h3><span id="동시작업-가능-여부">동시작업 가능 여부</span></h3>
+<ol>
+<li>
+<p>Single Tasking(단일 작업)의 경우 한 번에 하나만 처리 하는 것.</p>
+</li>
+<li>
+<p>Multi Tasking(다중 작업)의 경우 동시에 두 개 이상의 작업을 처리하는 것.</p>
+</li>
+</ol>
+<p>이전의 OS가 Single Tasking 만을 지원했다면 현재의 OS는 대부분 Multi Tasking을 지원한다!</p>
+<h3><span id="사용자의-수">사용자의 수</span></h3>
+<ol>
+<li>
+<p>Single User(단일 사용자) : 과거에 Windows는 단일 사용자만 허용했다.</p>
+</li>
+<li>
+<p>Multi User(다중 사용자) : 여러 사용자의 계정을 만들어서 동시에 접근할 수 있게한다. =&gt; 이 경우에는 보안등 처리할 것이 더 복잡하다.</p>
+</li>
+</ol>
+<h3><span id="처리-방식"><code>처리 방식</code></span></h3>
+<ol>
+<li>
+<p>Batch Processing(일괄 처리)란<br>
+작업 요청시 마다 바로바로 처리하는 것이 아니라, 작업 요청을 일정량 모아서 한꺼번에 처리하는 것을 말한다.<br>
+=&gt; 현대의 OS에서는 찾아보기 어려운 처리 방식이다!<br>
+=&gt; 역사 속의 System =&gt; <code>Interactive 하지 않다.</code></p>
+</li>
+<li>
+<p><code>Time Sharing(시분할 방식)</code>이란<br>
+현재 우리가 사용 중인 컴퓨터가 <code>Time Sharing</code> 방식으로 처리하고 있다고 이해하면 된다! CPU로 여러 작업을 처리할 때 <code>컴퓨터의 처리 능력을 일정한 시간 단위로 분할하여 사용하는 것!</code><br>
+=&gt; 내가 키보드를 두드렸을 때 바로 화면에서 결과를 확인할 수 있는 <code>Interactive한 방식</code>이다.<br>
+=&gt; 시간을 분할하여 처리하기 때문에 짧은 응답시간을 가지는 처리 방식이다!<br>
+하지만 사용자가 늘어나거나 처리해야할 작업량이 많아지면 응답시간이 늘어 나기도 한다.</p>
+</li>
+</ol>
+<p><code>Time Sharing의 목적</code>은 <strong>사람이 느끼기에는 빠르게 처리되게 느끼게 하면서 주어진 자원을 최대한 효율적으로 사용하는 것</strong>에 있기 때문에 졍해진 <code>시간을 정확히 맞춰서 처리해야하는 처리 방식은 아니다.</code><br>
+=&gt; 사람에 특화된 처리 방식!</p>
+<p>Linux, Unix, Windows, Ios 등의 OS는 모두 Time Sharing 처리 방식을 따른다.</p>
+<ol start="3">
+<li>Realtime OS(실시간)란<br>
+그냥 보기에는 Interactive하고 Time Sharing과 비슷해 보일 수 있지만 이론적으로는 전혀 다른 처리방식이다.<br>
+처리시간에 <code>Deadline이 존재</code>하고 그 시간안에 반드시 작업이 종료되어야 한다.<br>
+=&gt; 이 때문에 Time Sharing은 범용 컴퓨터에서 주로 사용하고 <strong>Realtime OS</strong>는 특수한 목적의 시스템에서 <code>반드시 시간안에 해당 작업을 종료해야 하는 곳</code>에 사용한다.(정교한 장비에 사용!)</li>
+</ol>
+<p>Realtime OS는 두 가지로 분류할 수 있다.</p>
+<ul>
+<li>
+<p><strong>Hard Realtime System(경성 실시간 시스템)</strong> : Realtime System에서 Deadline을 정확히 지키지 않으면 크게 문제가 발생하는 것을 <code>Hard Realtime System</code>이라고 한다</p>
+</li>
+<li>
+<p><strong>Soft Realtime System(연성 실시간 시스템)</strong> : Hard Realtime System에 비해 Deadline을 지켜야하지만 반드시 꼭 지켜지지 않아도 치명적인 문제를 야기하지는 않는 System을 <code>Soft Realtime System</code>이라고 한다.<br>
+ex) 멀티미디어 재생시 초당 24프레임을 읽고 인코딩해야 하지만 이게 처리되지 않으면 영상이 끊긴다 =&gt; 기분이 나쁘지만 기다릴 수 있다. Deadline은 있는 것!</p>
+</li>
+</ul>
+<p>OS 공부에서 언급될 운영체제는 대부분 Time Sharing과 관련된 내용이다!</p>
+<hr>
+<h2><span id="os에서-사용할-몇-가지-용어">OS에서 사용할 몇 가지 용어!</span></h2>
+<p>비슷한 내용의 다른 단어들이 있어서 이 곳에 간략하게 정리해 보겠다.</p>
+<p><code>Multitasking</code><br>
+일반적인 의미로 많이 사용한다. 하나의 프로그램이 끝나기 전에 다른 프로그램이 실행될 수 있는 것을 의미!</p>
+<p><code>Multiprogramming</code><br>
+여러 프로그램을 동시에 처리하려면 당연히 메모리에 여러 프로그램이 동시에 올라가 있어야 하지만, <strong>메모리 부분을 강조해서 설명하는 것을 Multiprogramming</strong>이라고 한다.</p>
+<p><code>Time Sharing</code><br>
+동시에 여러 작업을 처리하는 것은 동일하지만 <strong>CPU의 시간을 분할하여 나누어 쓰는 것을 강조</strong>한 것</p>
+<p>MultiProcess또한 비슷한 의미로 위의 단어들과 같이 어떠한 작업을 동시에 처리하는 것을 의미한다.</p>
+<p><code>Multiprocessor</code>는 <strong>하나의 컴퓨터에 여러 Processor(CPU)가 붙어 있음을 의미</strong>하는 것!</p>
+<hr>
+<h2><span id="os의-예시">OS의 예시</span></h2>
+<ol>
+<li>UNIX :</li>
+</ol>
+<ul>
+<li>
+<p>코드의 대부분을 C언어로 작성!</p>
+</li>
+<li>
+<p>높은 이식성 =&gt; portable하다</p>
+</li>
+<li>
+<p><code>최소한의 Kernel 구조!</code> =&gt; 커널 크기를 최소화하고 핵심만 커널에! 때문에 확장성이 높아진다!</p>
+</li>
+<li>
+<p>다양한 버전이 있다.</p>
+<p>UNIX는 대형 컴퓨터를 위해 만들어진 OS다.</p>
+</li>
+</ul>
+<ol start="2">
+<li>DOS(Disk Operating System)</li>
+</ol>
+<ul>
+<li>초창기 단일 작업용 OS</li>
+<li>단일 사용자용 운영체제, 메모리 관리 능력에 한계</li>
+</ul>
+<ol start="3">
+<li>MS Windows</li>
+</ol>
+<ul>
+<li>MS사의 다중 작업용 <code>GUI 기반 운영 체제</code></li>
+<li>Plug and Play, 네트워크 환경 강화</li>
+<li>DOS용 응용 프로그램과 호환성 제공</li>
+<li>불안정성 =&gt; 초창기의 windows에서 불안정했지만 현재는 아니다!</li>
+<li>풍부한 자원 소프트웨어</li>
+</ul>
+<ol start="4">
+<li>Handheld Device를 위한 OS</li>
+</ol>
+<ul>
+<li>PalmOS, WinCE, Tiny OS 등</li>
+</ul>
+<h2><span id="운영체제의-구조">운영체제의 구조!</span></h2>
+<img src="OS.png" width="500" height="200">
+<p>위의 OS 구조를 보았을 때 CPU와 Memory, Disk, I/O Device에 따라 역할을 나누어 보겠다.</p>
+<ol>
+<li>CPU</li>
+</ol>
+<ul>
+<li>
+<p>CPU는 <code>처리 속도가 굉장히 빠른 장치</code>이다. 이러한 CPU를 짧은 시간 간격으로 Process에 할당 분배하며 사용한다.</p>
+</li>
+<li>
+<p>그렇다면 빠른 처리 속도의 CPU를 어떤 Process에 할당할 것인가? 이를 정하는 것을 <code>CPU Scheduling</code>이라고 한다.</p>
+</li>
+<li>
+<p>현실에서는 선착순이 효율적이지만 Computer System안에서는 더 효율적인 스케줄링 기법을 필요로한다!<br>
+=&gt; 한 작업을 온전히 끝내는 식으로 하면 효율적이지 않다. CPU를 줬다 뺏었다 하는 식으로!</p>
+</li>
+</ul>
+<ol start="2">
+<li>Memory</li>
+</ol>
+<ul>
+<li>
+<p>한정적인 Memory 공간에 여러 프로그램에 동시에 올리려고 할때 Memory를 N등분 하는 것이 효율적인가? =&gt; <code>어떻게 Memory를 관리해야 하는가?</code></p>
+</li>
+<li>
+<p>CPU가 처리가능한 범주 내의 프로그램만 먼저 메모리에 올려두고(Working set에 올라 있는 프로그램만) 나머지는 Disk로 내려보낸다.</p>
+</li>
+<li>
+<p>그렇다면 Memory에 공간이 없을 때 어떤 프로그램을 Disk로 내려보내야 하는가?<br>
+=&gt; 미래에 <code>CPU할당이 필요없을 확률이 높은 것을 예측하여 Disk로</code> 쫒아낸다.<br>
+=&gt; 과거의 경험을 통해 최근 사용량을 분석하여 머물 프로그램 &amp; 쫒겨날 프로그램을 결정!</p>
+</li>
+<li>
+<p>Memory안에는 항상 <code>Kernel이 상주</code>하고 있다!</p>
+</li>
+</ul>
+<ol start="3">
+<li>Disk</li>
+</ol>
+<ul>
+<li>
+<p>Disk에 파일을 어떻게 보관해야 하는가?<br>
+=&gt; 조각조각 나눠서 보관?? 연속적인 데이터로 보관??<br>
+=&gt; 파일관리의 중요성! =&gt; <strong>Disk 특성에 맞게 파일 관리!</strong></p>
+</li>
+<li>
+<p>Disk에 접근하기 위해선 <code>Disk Head가 움직이면서 정보를 읽어야한다</code>.</p>
+</li>
+<li>
+<p>효율적인 파일 관리를 위해 <code>Disk도 Scheduling이 필요</code>하다.<br>
+=&gt; 디스크 스케줄링은 엘레베이터 스케줄링과 비슷하다!<br>
+=&gt; 순서대로만 한다면 1층 -&gt; 100층 -&gt; 2층 -&gt; 99층 식으로 Disk 헤드가 비효율적으로 움직여야한다!<br>
+=&gt; <code>같은 방향의 층은 태워서 같이!</code></p>
+</li>
+</ul>
+<p>하지만 CPU 스케줄링과는 성격이 다르다!<br>
+<strong>CPU는 너무 빠른 처리 속도 때문에 어떻게 관리할 지를 스케줄링!</strong></p>
+<p><strong>디스크는 어떻게 헤더의 움직임을 줄이면서 효율적으로 일하게 할 수 있는가!</strong></p>
+<ol start="4">
+<li>I/O Device</li>
+</ol>
+<ul>
+<li>
+<p>I/O Device는 <code>다른 자원에 비해 상당히 느리다!</code></p>
+</li>
+<li>
+<p>I/O Device들과 CPU는 어떻게 통신할 것인가!<br>
+=&gt; 이를 입출력 관리라고 한다!</p>
+</li>
+<li>
+<p><code>입출력 관리</code>는 <code>인터럽트(Interrupt)</code>를 통해서 처리한다.</p>
+</li>
+<li>
+<p>빠른 CPU는 항상 자기 일하면서 I/O를 신경쓰지 않고 일하다가 I/O 장치가 처리를 필요로 하면 CPU에 <code>인터럽트를 걸어서 알리면 CPU가 다음 작업을 하기 전에 I/O의 요청을 처리</code>하게 된다.</p>
+</li>
+</ul>
+<hr>
+<p>1장 정리는 여기까지! 추가할 내용이 있다면 수정하도록 할 예정!</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/09/03/javaI-O/" data-toggle="tooltip" data-placement="top" title="Language : 자바 문자열 입출력">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Operating System(OS)!!</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">OS(운영체제)란 무엇인가?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">OS의 목적!</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">운영체제의 분류</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">동시작업 가능 여부</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">사용자의 수</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.3.</span> <span class="toc-nav-text">처리 방식</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">OS에서 사용할 몇 가지 용어!</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">OS의 예시</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">운영체제의 구조!</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#OS" title="OS">OS</a>
+                        
+                          <a class="tag" href="/tags/#CS" title="CS">CS</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://beantech.org" target="_blank">Bean Tech</a></li>
+                    
+                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="#" target="_blank">It Helps SEO</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/ryusuhan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; ryudd 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://ryusuhan.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://ryusuhan.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
